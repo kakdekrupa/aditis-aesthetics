@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aditi's Aesthetics — Skincare Curation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --white:    #ffffff;
+      --off:      #f8f6f3;
+      --stone:    #ede9e3;
+      --mist:     #d9d3cb;
+      --ink:      #1a1714;
+      --warm:     #4a4340;
+      --mid:      #7a716b;
+      --accent:   #b5896e;
+      --accent-l: #d4ac93;
+      --pin-red:  #e60023;
+      --serif:    'Playfair Display', Georgia, serif;
+      --sans:     'Jost', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--white);
+      color: var(--ink);
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cursor {
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    }
+    .cursor.expand { width: 36px; height: 36px; background: transparent; border: 1px solid var(--accent); }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 5vw;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--stone);
+      transition: padding 0.4s;
+    }
+
+    .nav-wordmark {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-wordmark em { font-style: italic; color: var(--accent); }
+
+    .nav-center {
+      display: flex; gap: 3rem;
+      position: absolute; left: 50%; transform: translateX(-50%);
+    }
+    .nav-center a {
+      font-size: 0.72rem; font-weight: 300;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none;
+      transition: color 0.25s;
+    }
+    .nav-center a:hover { color: var(--ink); }
+
+    .nav-pin {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--pin-red); color: #fff;
+      text-decoration: none; padding: 0.5rem 1.1rem;
+      border-radius: 2px;
+      font-size: 0.7rem; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .nav-pin:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 52% 48%;
+      padding-top: 70px;
+    }
+
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 8vh 5vw 8vh 8vw;
+      position: relative;
+    }
+
+    /* fine rule decorations */
+    .hero-left::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 15%; bottom: 15%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--mist), transparent);
+    }
+
+    .hero-kicker {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .hero-kicker-line { flex: 1; max-width: 40px; height: 1px; background: var(--accent); }
+    .hero-kicker span {
+      font-size: 0.65rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--accent); font-weight: 300;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.6rem, 4.5vw, 4.6rem);
+      font-weight: 300;
+      line-height: 1.12;
+      color: var(--ink);
+      margin-bottom: 2rem;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-body {
+      font-size: 0.92rem; font-weight: 300;
+      line-height: 1.85; color: var(--mid);
+      max-width: 400px; margin-bottom: 3rem;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      text-decoration: none; font-size: 0.72rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      font-weight: 400; transition: all 0.28s;
+    }
+    .btn-dark {
+      background: var(--ink); color: #fff;
+      padding: 0.85rem 2rem; border-radius: 2px;
+    }
+    .btn-dark:hover { background: var(--warm); }
+
+    .btn-ghost {
+      color: var(--mid); border-bottom: 1px solid var(--mist);
+      padding-bottom: 2px;
+    }
+    .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+    /* ─── HERO RIGHT (collage) ─── */
+    .hero-right {
+      background: var(--off);
+      position: relative; overflow: hidden;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .hero-tile {
+      overflow: hidden; position: relative; background: var(--stone);
+    }
+    .hero-tile img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(.25,.8,.25,1);
+    }
+    .hero-tile:hover img { transform: scale(1.04); }
+    .hero-tile.span2 { grid-column: span 2; }
+
+    .hero-tile-label {
+      position: absolute; bottom: 1rem; left: 1rem;
+      background: rgba(255,255,255,0.88);
+      font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 0.3rem 0.7rem; color: var(--ink);
+      backdrop-filter: blur(6px);
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      display: flex; align-items: center;
+      gap: 1.5rem; padding: 0 8vw;
+      margin: 5rem 0 2rem;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--stone); }
+    .divider-text {
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--mist); font-weight: 300;
+    }
+
+    /* ─── SECTION TITLES ─── */
+    .sec-header { text-align: center; margin-bottom: 3.5rem; }
+    .sec-tag {
+      display: inline-block;
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.9rem; font-weight: 300;
+    }
+    .sec-title {
+      font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 300; color: var(--ink); line-height: 1.2;
+    }
+    .sec-title em { font-style: italic; color: var(--accent); }
+
+    /* ─── PINTEREST SECTION ─── */
+    .pin-section { padding: 6rem 8vw; background: var(--off); }
+
+    .pin-section .sec-header { margin-bottom: 1rem; }
+
+    .pin-subtext {
+      text-align: center; font-size: 0.88rem; font-weight: 300;
+      color: var(--mid); line-height: 1.7; max-width: 480px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* Pinterest Widget Container */
+    .pin-widget-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      border: 1px solid var(--stone);
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--white);
+      min-height: 380px;
+      display: flex; flex-direction: column;
+    }
+
+    .pin-widget-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 1.6rem;
+      border-bottom: 1px solid var(--stone);
+    }
+    .pin-widget-header-left {
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .pin-red-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--pin-red);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pin-red-dot svg { width: 14px; height: 14px; }
+    .pin-handle {
+      font-size: 0.78rem; font-weight: 400; color: var(--ink);
+      letter-spacing: 0.04em;
+    }
+    .pin-handle span { color: var(--mid); font-weight: 300; }
+
+    .pin-follow-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--pin-red); color: #fff;
+      text-decoration: none; padding: 0.45rem 1rem;
+      border-radius: 100px;
+      font-size: 0.68rem; font-weight: 400;
+      letter-spacing: 0.08em;
+      transition: opacity 0.2s;
+    }
+    .pin-follow-btn:hover { opacity: 0.85; }
+
+    /* Simulated Pinterest board grid (real embed replaces this) */
+    .pin-board-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+      padding: 3px;
+      flex: 1;
+    }
+
+    .pin-card {
+      background: var(--stone);
+      aspect-ratio: 2/3;
+      overflow: hidden; position: relative;
+    }
+    .pin-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform 0.5s;
+    }
+    .pin-card:hover img { transform: scale(1.06); }
+
+    .pin-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,23,20,0.55), transparent 45%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end; padding: 0.8rem;
+    }
+    .pin-card:hover .pin-card-overlay { opacity: 1; }
+    .pin-save-btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: var(--pin-red); color: #fff;
+      font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.7rem; border-radius: 100px;
+    }
+
+    .pin-widget-footer {
+      padding: 1rem 1.6rem;
+      border-top: 1px solid var(--stone);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .pin-see-more {
+      font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      text-decoration: none; font-weight: 400;
+      transition: color 0.2s;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .pin-see-more:hover { color: var(--ink); }
+    .pin-boards-count { font-size: 0.68rem; color: var(--mist); font-weight: 300; }
+
+    /* Real Pinterest embed note */
+    .pin-embed-note {
+      text-align: center; margin-top: 1.5rem;
+      font-size: 0.72rem; color: var(--mid); font-weight: 300;
+      line-height: 1.6;
+    }
+    .pin-embed-note code {
+      font-family: monospace; background: var(--stone);
+      padding: 0.15rem 0.45rem; border-radius: 2px;
+      font-size: 0.68rem; color: var(--warm);
+    }
+
+    /* ─── ABOUT ─── */
+    .about-section {
+      padding: 6rem 8vw;
+      display: grid;
+      grid-template-columns: 1fr 2px 1fr;
+      gap: 5vw;
+      align-items: center;
+    }
+    .about-divider-line {
+      background: linear-gradient(to bottom, transparent, var(--mist), transparent);
+      align-self: stretch;
+    }
+
+    .about-img-col { position: relative; }
+    .about-img {
+      width: 100%; aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block; background: var(--stone);
+    }
+    .about-img-tag {
+      position: absolute; bottom: -1px; right: -1px;
+      background: var(--white); border: 1px solid var(--stone);
+      padding: 1rem 1.4rem;
+    }
+    .about-img-tag p {
+      font-size: 0.62rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--mid);
+      font-weight: 300; margin-bottom: 0.2rem;
+    }
+    .about-img-tag strong {
+      font-family: var(--serif); font-size: 1.3rem;
+      font-weight: 300; color: var(--ink);
+    }
+
+    .about-text-col {}
+    .about-title {
+      font-family: var(--serif); font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+      font-weight: 300; line-height: 1.25; color: var(--ink);
+      margin-bottom: 1.6rem;
+    }
+    .about-title em { font-style: italic; color: var(--accent); }
+
+    .about-body {
+      font-size: 0.9rem; font-weight: 300; line-height: 1.9;
+      color: var(--mid); margin-bottom: 2.2rem;
+    }
+
+    .about-rows { display: flex; flex-direction: column; gap: 1px; margin-bottom: 2.5rem; }
+    .about-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.85rem 0; border-bottom: 1px solid var(--stone);
+    }
+    .about-row-label {
+      font-size: 0.68rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--mist); font-weight: 300;
+    }
+    .about-row-value {
+      font-family: var(--serif); font-size: 1.5rem;
+      font-weight: 300; color: var(--accent);
+    }
+
+    /* ─── DISCLOSURE STRIP ─── */
+    .disclosure {
+      background: var(--off);
+      border-top: 1px solid var(--stone);
+      padding: 1.2rem 8vw;
+      display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+    }
+    .disclosure-icon {
+      width: 20px; height: 20px; border: 1px solid var(--mist);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+    }
+    .disclosure-icon svg { width: 10px; height: 10px; }
+    .disclosure p {
+      font-size: 0.7rem; font-weight: 300;
+      color: var(--mid); line-height: 1.5; text-align: center;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 3rem 8vw;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--stone);
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--serif); font-size: 1.1rem;
+      font-weight: 300; color: var(--ink);
+    }
+    .footer-logo em { font-style: italic; color: var(--accent); }
+
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a {
+      font-size: 0.68rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--mid);
+      text-decoration: none; font-weight: 300;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--ink); }
+
+    .footer-pin a {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--pin-red); text-decoration: none;
+      font-size: 0.68rem; letter-spacing: 0.12em;
+      text-transform: uppercase; font-weight: 400;
+      transition: opacity 0.2s;
+    }
+    .footer-pin a:hover { opacity: 0.7; }
+
+    /* ─── FADE-IN ─── */
+    [data-reveal] {
+      opacity: 0; transform: translateY(22px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    [data-reveal].revealed { opacity: 1; transform: none; }
+
+    /* ─── MOBILE ─── */
+    @media(max-width: 900px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { min-height: 50vw; }
+      .hero-left { padding: 8vh 6vw; }
+      .hero-left::after { display: none; }
+      .nav-center { display: none; }
+      .about-section { grid-template-columns: 1fr; }
+      .about-divider-line { display: none; }
+      .pin-board-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-wordmark">Aditi's <em>Aesthetics</em></a>
+  <div class="nav-center">
+    <a href="#pinterest">Pinterest</a>
+    <a href="#about">About</a>
+  </div>
+  <a href="https://pin.it/2GYMMCUWB" target="_blank" class="nav-pin">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+    Follow
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-kicker" data-reveal>
+      <span class="hero-kicker-line"></span>
+      <span>Skincare · Lifestyle · Amazon Finds</span>
+    </div>
+    <h1 data-reveal>Skin that <em>tells</em> a story worth telling.</h1>
+    <p class="hero-body" data-reveal>
+      I'm Aditi — I find the products that actually work, pin them so you never lose them, and link every single one. Clean, considered, curated.
+    </p>
+    <div class="hero-actions" data-reveal>
+      <a href="#pinterest" class="btn btn-dark">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+        See My Boards
+      </a>
+      <a href="#about" class="btn btn-ghost">About Aditi →</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-tile">
+      <img src="https://images.unsplash.com/photo-1556228852-6d35a585d566?w=600&q=80" alt="skincare flatlay" loading="lazy"/>
+      <span class="hero-tile-label">Skincare</span>
+    </div>
+    <div class="hero-tile">
+      <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80" alt="beauty products" loading="lazy"/>
+      <span class="hero-tile-label">Beauty</span>
+    </div>
+    <div class="hero-tile span2">
+      <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=900&q=80" alt="morning routine" loading="lazy"/>
+      <span class="hero-tile-label">Morning Ritual</span>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider">
+  <span class="divider-line"></span>
+  <span class="divider-text">Pinterest Board · Amazon Affiliate · Skincare Curation</span>
+  <span class="divider-line"></span>
+</div>
+
+<!-- PINTEREST SECTION -->
+<section class="pin-section" id="pinterest">
+  <div class="sec-header" data-reveal>
+    <span class="sec-tag">My Pinterest</span>
+    <h2 class="sec-title">Boards Worth <em>Saving</em></h2>
+  </div>
+  <p class="pin-subtext" data-reveal>
+    Every pin links back to a product I've tested or researched — mostly on Amazon, always honest. Follow along for new finds every week.
+  </p>
+
+  <!-- Pinterest Board Widget -->
+  <div class="pin-widget-wrap" data-reveal>
+    <div class="pin-widget-header">
+      <div class="pin-widget-header-left">
+        <div class="pin-red-dot">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+        </div>
+        <span class="pin-handle">Aditi's Aesthetics <span>· pin.it/2GYMMCUWB</span></span>
+      </div>
+      <a href="https://pin.it/2GYMMCUWB" target="_blank" class="pin-follow-btn">
+        + Follow
+      </a>
+    </div>
+
+    <!-- Pinterest Official Embed -->
+    <div style="padding: 1.5rem; display:flex; justify-content:center;">
+      <a data-pin-do="embedUser"
+         data-pin-board-width="800"
+         data-pin-scale-height="400"
+         data-pin-scale-width="80"
+         href="https://pin.it/2GYMMCUWB">
+      </a>
+    </div>
+
+    <div class="pin-widget-footer">
+      <a href="https://pin.it/2GYMMCUWB" target="_blank" class="pin-see-more">
+        See all pins on Pinterest
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <span class="pin-boards-count">Updated weekly</span>
+    </div>
+  </div>
+
+
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+
+
+  <div class="about-text-col" data-reveal>
+    <h2 class="about-title">Skincare doesn't have to be <em>complicated.</em></h2>
+    <p class="about-body">
+      I'm a skincare obsessive with a soft spot for minimalist routines and honest reviews. I spend hours testing, comparing, and pinning products from Amazon — so you can scroll straight to the good stuff.<br><br>
+      Every product on my Pinterest is either something I use daily, have gifted to someone I love, or researched thoroughly before sharing. No fluff. Just skin.
+    </p>
+    <div class="about-rows">
+      <div class="about-row">
+        <span class="about-row-label">Products Curated</span>
+        <span class="about-row-value">200+</span>
+      </div>
+      <div class="about-row">
+        <span class="about-row-label">Pinterest Boards</span>
+        <span class="about-row-value">30+</span>
+      </div>
+      <div class="about-row">
+        <span class="about-row-label">New Pins Weekly</span>
+        <span class="about-row-value">10–15</span>
+      </div>
+    </div>
+    <a href="https://pin.it/2GYMMCUWB" target="_blank" class="btn btn-dark">
+      Follow on Pinterest →
+    </a>
+  </div>
+</section>
+
+<!-- AFFILIATE DISCLOSURE -->
+<div class="disclosure">
+  <div class="disclosure-icon">
+    <svg viewBox="0 0 16 16" fill="none" stroke="var(--mid)" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 7v4M8 5.5v.5"/></svg>
+  </div>
+  <p>
+    This site contains Amazon affiliate links. As an Amazon Associate, I earn a small commission from qualifying purchases — at no extra cost to you. I only share products I genuinely stand behind.
+  </p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Aditi's <em>Aesthetics</em></span>
+  <div class="footer-links">
+    <a href="#pinterest">Pinterest</a>
+    <a href="#about">About</a>
+    <a href="https://www.amazon.com" target="_blank">Amazon Shop</a>
+  </div>
+  <div class="footer-pin">
+    <a href="https://pin.it/2GYMMCUWB" target="_blank">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+      pin.it/2GYMMCUWB
+    </a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .pin-card, .hero-tile').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('[data-reveal]');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('revealed'), i * 70);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => obs.observe(el));
+
+  // Stagger hero elements on load
+  document.querySelectorAll('.hero-left [data-reveal]').forEach((el, i) => {
+    setTimeout(() => el.classList.add('revealed'), 300 + i * 150);
+  });
+</script>
+
+<!-- Pinterest SDK -->
+<script async defer src="//assets.pinterest.com/js/pinit.js"></script>
+
+</body>
+</html>
